@@ -4,6 +4,26 @@ const c = canvas.getContext('2d');
 canvas.width = 1800;
 canvas.height = 900;
 
+
+// Sound Effect
+
+var sfx = {
+    push: new Howl({
+       src: [
+          'https://assets.codepen.io/21542/howler-push.mp3',
+       ]
+    }),
+    boost: new Howl({
+       src: [
+          'https://assets.codepen.io/21542/howler-sfx-levelup.mp3'
+       ],
+       loop: false,
+       onend: function() {
+          console.log("Done playing sfx!")
+       }
+    })
+ }
+
 c.fillRect(0, 0, canvas.width, canvas.height);
 
 const gravity = 2;
@@ -347,7 +367,6 @@ class ColumnLaser {
         return Date.now() - this.startTime < this.redDuration;
     }
 }
-
 const columnLasers = [];
 
 function createColumnLaser() {
@@ -376,8 +395,14 @@ function handleColumnLaserCollision(player) {
         }
     });
 }
+function isPlayerAlive(player) {
+    return player.alive;
+}
+
+let gamePaused = false; // Variable to track if the game is paused
 
 function animate() {
+    if (gamePaused) return; // If the game is paused, stop the animation loop
     window.requestAnimationFrame(animate);
     c.fillStyle = 'black';
     c.fillRect(0, 0, canvas.width, canvas.height);
@@ -386,10 +411,10 @@ function animate() {
     handleLaserCollision(player);
     handleLaserCollision(player2);
     handleCollision(player, player2);
-    handleColumnLaserCollision(player); // Kiểm tra va chạm với cột laser
-    handleColumnLaserCollision(player2); // Kiểm tra va chạm với cột laser
-    handleRocketCollision(player); // Kiểm tra va chạm với rocket
-    handleRocketCollision(player2); // Kiểm tra va chạm với rocket
+    handleColumnLaserCollision(player);
+    handleColumnLaserCollision(player2);
+    handleRocketCollision(player);
+    handleRocketCollision(player2);
     lasers.forEach(laser => laser.update());
     meteors.forEach(meteor => {
         meteor.update();
@@ -410,7 +435,7 @@ function animate() {
     columnLasers.forEach((columnLaser, index) => {
         columnLaser.update();
         if (!columnLaser.isAlive()) {
-            columnLasers.splice(index, 1); // Xóa cột laser nếu đã hết thời gian tồn tại
+            columnLasers.splice(index, 1);
         }
     });
     if (!player.immobile && player.alive) {
@@ -423,13 +448,31 @@ function animate() {
         }
     }
     if (!player2.immobile && player2.alive) {
-        if (keys.ArrowLeft.pressed) {
-            player2.velocity.x = -10;
-        } else if (keys.ArrowRight.pressed) {
+        if (keys.ArrowRight.pressed) {
             player2.velocity.x = 10;
+        } else if (keys.ArrowLeft.pressed) {
+            player2.velocity.x = -10;
         } else {
             player2.velocity.x = 0;
         }
+    }
+    displayWinner(); // Call the function to display winner
+}
+
+function displayWinner() {
+    if (!isPlayerAlive(player) || !isPlayerAlive(player2)) {
+        const winnerContainer = document.getElementById('winnerContainer');
+        const winnerText = document.createElement('p');
+        winnerText.textContent = !isPlayerAlive(player) ? 'Player 2 is the winner!' : 'Player 1 is the winner!';
+        const replayButton = document.createElement('button');
+        replayButton.textContent = 'Replay';
+        replayButton.addEventListener('click', () => {
+            location.reload();
+        });
+        winnerContainer.appendChild(winnerText);
+        winnerContainer.appendChild(replayButton);
+        gamePaused = true; // Pause the game
+        sfx.push.play();
     }
 }
 animate();
