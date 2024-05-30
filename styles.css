@@ -1,18 +1,96 @@
-canvas {
-    position: relative; /* Đảm bảo winnerContainer được định vị trong phạm vi của canvas */
-}
-
-#winnerContainer {
-    width: 0;
-    height: 0;
+/* Add styles for the menu */
+.menu {
+    width: 100%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     text-align: center;
-    background-color: rgba(255, 255, 255, 0.9); /* Màu nền của winnerContainer */
-    padding: 20px; /* Khoảng cách giữa các phần tử bên trong winnerContainer */
-    border-radius: 10px; /* Bo tròn viền của winnerContainer */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Đổ bóng cho winnerContainer */
-    z-index: 999; /* Đảm bảo winnerContainer hiển thị trên mọi phần khác */
+    background: linear-gradient(135deg, #00b4db, #0083b0);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    animation: slideIn 1s ease forwards;
+}
+
+.menu h1 {
+    font-size: 48px;
+    margin-bottom: 30px;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.menu button {
+    padding: 15px 30px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #fff;
+    color: #00b4db;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.menu button:hover {
+    background-color: #0083b0;
+    color: white;
+}
+
+@keyframes slideIn {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+    }
+}
+.end-game-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    padding: 40px;
+    border-radius: 10px;
+    text-align: center;
+    color: white;
+    font-family: Arial, sans-serif; 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2); 
+    animation: fadeIn 1s ease forwards; 
+}
+
+.end-game-message {
+    margin-bottom: 30px;
+}
+
+.end-game-message p {
+    font-size: 24px;
+}
+
+.replay-button {
+    padding: 15px 30px;
+    font-size: 24px;
+    cursor: pointer;
+    background-color: #fff; 
+    color: #00b4db; 
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.replay-button:hover {
+    background-color: #0083b0; 
+    color: white;
+}
+
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
